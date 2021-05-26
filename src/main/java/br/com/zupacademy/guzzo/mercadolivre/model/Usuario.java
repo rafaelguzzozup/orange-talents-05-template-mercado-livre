@@ -34,9 +34,30 @@ public class Usuario {
 
 	private LocalDateTime dataCriacao = LocalDateTime.now();
 
+	@Deprecated
+	public Usuario() {
+
+	}
+
 	public Usuario(@NotNull @NotBlank @Email String login, @NotNull @NotBlank @Size(min = 6) String senha) {
 		this.login = login;
 		this.senha = GeradorDeSenhaUsuario.geradorSenha(senha);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public LocalDateTime getDataCriacao() {
+		return dataCriacao;
 	}
 
 }
