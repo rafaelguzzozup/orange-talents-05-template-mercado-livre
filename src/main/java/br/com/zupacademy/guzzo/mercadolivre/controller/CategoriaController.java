@@ -28,9 +28,8 @@ public class CategoriaController {
 		Categoria categoria = form.converterParaCategoria();
 
 		if (form.getIdCategoriaMae() != null) {
-			Categoria categoriaMae = categoriaRepository.findById(form.getIdCategoriaMae())
-					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não econtrado categoria Mãe com id: " + form.getIdCategoriaMae()));
-			
+			Categoria categoriaMae = categoriaRepository.findById(form.getIdCategoriaMae()).get();
+
 			categoria.setCategoriaMae(categoriaMae);
 		}
 
