@@ -2,6 +2,7 @@ package br.com.zupacademy.guzzo.mercadolivre.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,7 @@ public class Usuario {
 	@NotNull
 	@NotBlank
 	@Email
+	@Column(unique = true)
 	private String login;
 
 	@NotNull
