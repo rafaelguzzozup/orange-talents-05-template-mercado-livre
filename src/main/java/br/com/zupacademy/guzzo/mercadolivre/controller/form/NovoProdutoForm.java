@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.Length;
 
 import br.com.zupacademy.guzzo.mercadolivre.model.Categoria;
 import br.com.zupacademy.guzzo.mercadolivre.model.Produto;
+import br.com.zupacademy.guzzo.mercadolivre.model.Usuario;
 import br.com.zupacademy.guzzo.mercadolivre.validator.ExisteId;
 
 public class NovoProdutoForm {
@@ -51,10 +52,10 @@ public class NovoProdutoForm {
 		this.idCategoria = idCategoria;
 		this.caracteristicas = caracteristicas;
 	}
-	
-	public Produto converterParaProduto(EntityManager em) {
+
+	public Produto converterParaProduto(EntityManager em, Usuario usuario) {
 		Categoria categoria = em.find(Categoria.class, idCategoria);
-		return new Produto(nome, valor, quantidade, descricao, categoria, caracteristicas);
+		return new Produto(nome, valor, quantidade, descricao, categoria, usuario, caracteristicas);
 	}
 
 	@Override
