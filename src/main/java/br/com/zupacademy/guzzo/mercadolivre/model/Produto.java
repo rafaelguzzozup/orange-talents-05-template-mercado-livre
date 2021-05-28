@@ -58,8 +58,8 @@ public class Produto {
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
 	private Set<CaracteristicaProduto> caracteristicas;
 
-	@NotNull
-	@Size(min = 1)
+	//@NotNull
+	//@Size(min = 1)
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
 	private Set<ImagemProduto> imagens = new HashSet<>();
 

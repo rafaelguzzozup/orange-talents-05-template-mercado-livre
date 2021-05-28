@@ -21,6 +21,7 @@ import br.com.zupacademy.guzzo.mercadolivre.component.UploaderFake;
 import br.com.zupacademy.guzzo.mercadolivre.config.security.UsuarioLogado;
 import br.com.zupacademy.guzzo.mercadolivre.controller.form.NovaImagemForm;
 import br.com.zupacademy.guzzo.mercadolivre.controller.form.NovoProdutoForm;
+import br.com.zupacademy.guzzo.mercadolivre.controller.form.OpiniaoProdutoForm;
 import br.com.zupacademy.guzzo.mercadolivre.model.Produto;
 
 @RestController
@@ -45,11 +46,8 @@ public class ProdutoController {
 	@Transactional
 	public void cadastrarImagemProduto(@PathVariable Long id, @Valid NovaImagemForm form,
 			@AuthenticationPrincipal UsuarioLogado usuarioLogado) {
-		Produto produto = em.find(Produto.class, id);
 
-		if (produto == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto não encontrado com id " + id);
-		}
+		Produto produto = validaProdutoIdUrl(id);
 
 		if (!produto.getUsuario().equals(usuarioLogado.getUsuario())) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Este produto não pertece ao usuário informado!");
@@ -58,6 +56,27 @@ public class ProdutoController {
 		Set<String> imgs = uploaderFake.envia(form.getImagens());
 		produto.associaImagens(imgs);
 		em.merge(produto);
+	}
+
+	@PostMapping("/{id}/opiniao")
+	@Transactional
+	public void cadastrarOpiniao(@PathVariable Long id,@Valid @RequestBody OpiniaoProdutoForm form,
+			@AuthenticationPrincipal UsuarioLogado usuarioLogado) {
+
+		Produto produto = validaProdutoIdUrl(id);
+		em.persist(form.converterParaOpiniaoProduto(produto, usuarioLogado.getUsuario()));
+
+	}
+
+	@Transactional
+	private Produto validaProdutoIdUrl(Long id) {
+		Produto produto = em.find(Produto.class, id);
+
+		if (produto == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto não encontrado com id " + id);
+		}
+
+		return produto;
 	}
 
 }
