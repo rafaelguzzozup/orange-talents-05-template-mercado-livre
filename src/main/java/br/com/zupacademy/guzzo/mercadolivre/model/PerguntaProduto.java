@@ -59,4 +59,8 @@ public class PerguntaProduto {
 		return usuario;
 	}
 
+	public Usuario getDonoProduto() {
+		return produto.getDono();
+	}
+
 }

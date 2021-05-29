@@ -2,15 +2,16 @@ package br.com.zupacademy.guzzo.mercadolivre.component;
 
 import org.springframework.stereotype.Component;
 
-import br.com.zupacademy.guzzo.mercadolivre.model.PerguntaProduto;
-
 @Component
-public class EnviadorDeEmailFake {
+public class EnviadorDeEmailFake implements Mailer {
 
-	public void enviaEmailPerguntaProduto(PerguntaProduto perguntaProduto) {
-		System.out.println("Enviando email para o vendedor! " + perguntaProduto.getProduto().getDono().getLogin());
-		System.out.println("Contato: " + perguntaProduto.getUsuario().getLogin());
-		System.out.println("Assunto: " + perguntaProduto.getTitulo());
-
+	@Override
+	public void send(String corpo, String assunto, String nomeRemetente, String de, String para) {
+		System.out.println(corpo);
+		System.out.println(assunto);
+		System.out.println(nomeRemetente);
+		System.out.println(de);
+		System.out.println(para);
 	}
+
 }

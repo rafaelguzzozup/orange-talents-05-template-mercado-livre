@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.zupacademy.guzzo.mercadolivre.component.Emails;
 import br.com.zupacademy.guzzo.mercadolivre.component.EnviadorDeEmailFake;
 import br.com.zupacademy.guzzo.mercadolivre.component.UploaderFake;
 import br.com.zupacademy.guzzo.mercadolivre.config.security.UsuarioLogado;
@@ -38,7 +39,7 @@ public class ProdutoController {
 	private UploaderFake uploaderFake;
 
 	@Autowired
-	private EnviadorDeEmailFake enviadorDeEmailFake;
+	private Emails emails;
 
 	@PostMapping
 	@Transactional
@@ -81,7 +82,7 @@ public class ProdutoController {
 
 		Produto produto = validaProdutoIdUrl(id);
 		PerguntaProduto perguntaProduto = form.converterParaPerguntaProduto(produto, usuarioLogado.getUsuario());
-		enviadorDeEmailFake.enviaEmailPerguntaProduto(perguntaProduto);
+		emails.novaPergunta(perguntaProduto);
 		em.persist(perguntaProduto);
 
 	}
