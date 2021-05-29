@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.zupacademy.guzzo.mercadolivre.component.EnviadorDeEmailFake;
 import br.com.zupacademy.guzzo.mercadolivre.component.UploaderFake;
 import br.com.zupacademy.guzzo.mercadolivre.config.security.UsuarioLogado;
 import br.com.zupacademy.guzzo.mercadolivre.controller.form.NovaImagemForm;
 import br.com.zupacademy.guzzo.mercadolivre.controller.form.NovoProdutoForm;
 import br.com.zupacademy.guzzo.mercadolivre.controller.form.OpiniaoProdutoForm;
+import br.com.zupacademy.guzzo.mercadolivre.controller.form.PerguntaProdutoForm;
+import br.com.zupacademy.guzzo.mercadolivre.model.PerguntaProduto;
 import br.com.zupacademy.guzzo.mercadolivre.model.Produto;
 
 @RestController
@@ -33,6 +36,9 @@ public class ProdutoController {
 
 	@Autowired
 	private UploaderFake uploaderFake;
+
+	@Autowired
+	private EnviadorDeEmailFake enviadorDeEmailFake;
 
 	@PostMapping
 	@Transactional
@@ -49,7 +55,7 @@ public class ProdutoController {
 
 		Produto produto = validaProdutoIdUrl(id);
 
-		if (!produto.getUsuario().equals(usuarioLogado.getUsuario())) {
+		if (!produto.getDono().equals(usuarioLogado.getUsuario())) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Este produto não pertece ao usuário informado!");
 		}
 
@@ -60,11 +66,23 @@ public class ProdutoController {
 
 	@PostMapping("/{id}/opiniao")
 	@Transactional
-	public void cadastrarOpiniao(@PathVariable Long id,@Valid @RequestBody OpiniaoProdutoForm form,
+	public void cadastrarOpiniao(@PathVariable Long id, @Valid @RequestBody OpiniaoProdutoForm form,
 			@AuthenticationPrincipal UsuarioLogado usuarioLogado) {
 
 		Produto produto = validaProdutoIdUrl(id);
 		em.persist(form.converterParaOpiniaoProduto(produto, usuarioLogado.getUsuario()));
+
+	}
+
+	@PostMapping("/{id}/pergunta")
+	@Transactional
+	public void cadastrarPergunta(@PathVariable Long id, @Valid @RequestBody PerguntaProdutoForm form,
+			@AuthenticationPrincipal UsuarioLogado usuarioLogado) {
+
+		Produto produto = validaProdutoIdUrl(id);
+		PerguntaProduto perguntaProduto = form.converterParaPerguntaProduto(produto, usuarioLogado.getUsuario());
+		enviadorDeEmailFake.enviaEmailPerguntaProduto(perguntaProduto);
+		em.persist(perguntaProduto);
 
 	}
 

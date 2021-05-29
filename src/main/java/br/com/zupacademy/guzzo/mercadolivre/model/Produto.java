@@ -2,7 +2,6 @@ package br.com.zupacademy.guzzo.mercadolivre.model;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,6 +16,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
@@ -35,6 +35,7 @@ public class Produto {
 
 	@NotNull
 	@DecimalMin(value = "00.00", inclusive = false)
+	@Positive
 	private BigDecimal valor;
 
 	@NotNull
@@ -51,15 +52,15 @@ public class Produto {
 
 	@NotNull
 	@ManyToOne
-	private Usuario usuario;
+	private Usuario dono;
 
 	@NotNull
 	@Size(min = 3)
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
 	private Set<CaracteristicaProduto> caracteristicas;
 
-	//@NotNull
-	//@Size(min = 1)
+	// @NotNull
+	// @Size(min = 1)
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
 	private Set<ImagemProduto> imagens = new HashSet<>();
 
@@ -70,13 +71,13 @@ public class Produto {
 
 	public Produto(@NotBlank String nome, @NotNull @DecimalMin(value = "00.00", inclusive = false) BigDecimal valor,
 			@NotNull @Min(0) Long quantidade, @NotBlank @Length(max = 1000) String descricao, Categoria categoria,
-			Usuario usuario, @Size(min = 3) Set<NovaCaracteristicaForm> caracteristicas) {
+			Usuario dono, @Size(min = 3) Set<NovaCaracteristicaForm> caracteristicas) {
 		this.nome = nome;
 		this.valor = valor;
 		this.quantidade = quantidade;
 		this.descricao = descricao;
 		this.categoria = categoria;
-		this.usuario = usuario;
+		this.dono = dono;
 		this.caracteristicas = caracteristicas.stream()
 				.map(caracteristica -> caracteristica.converterParaCaracteristica(this)).collect(Collectors.toSet());
 	}
@@ -108,9 +109,9 @@ public class Produto {
 	public Set<CaracteristicaProduto> getCaracteristicas() {
 		return caracteristicas;
 	}
-	
-	public Usuario getUsuario() {
-		return usuario;
+
+	public Usuario getDono() {
+		return dono;
 	}
 
 	public void associaImagens(Set<String> imgs) {
