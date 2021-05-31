@@ -3,6 +3,7 @@ package br.com.zupacademy.guzzo.mercadolivre.model;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -67,7 +68,7 @@ public class Produto {
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
 	private Set<OpiniaoProduto> opinioes = new HashSet<>();
 
-	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "produto")
 	private Set<PerguntaProduto> perguntas = new HashSet<>();
 
 	@Deprecated
@@ -135,6 +136,21 @@ public class Produto {
 	public void associaImagens(Set<String> imgs) {
 		Set<ImagemProduto> imagens = imgs.stream().map(img -> new ImagemProduto(this, img)).collect(Collectors.toSet());
 		this.imagens.addAll(imagens);
+	}
+
+	public <T> Set<T> mapeiaCaracteristicas(Function<CaracteristicaProduto, T> funcaoMapeadora) {
+		return this.caracteristicas.stream().map(funcaoMapeadora).collect(Collectors.toSet());
+
+	}
+
+	public <T> Set<T> mapeiaPerguntas(Function<PerguntaProduto, T> funcaoMapeadora) {
+		return this.perguntas.stream().map(funcaoMapeadora).collect(Collectors.toSet());
+
+	}
+
+	public <T> Set<T> mapeiaImagens(Function<ImagemProduto, T> funcaoMapeadora) {
+		return this.imagens.stream().map(funcaoMapeadora).collect(Collectors.toSet());
+
 	}
 
 }
