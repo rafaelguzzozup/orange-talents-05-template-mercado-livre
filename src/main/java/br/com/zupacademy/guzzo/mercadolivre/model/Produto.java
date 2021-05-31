@@ -57,12 +57,18 @@ public class Produto {
 	@NotNull
 	@Size(min = 3)
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
-	private Set<CaracteristicaProduto> caracteristicas;
+	private Set<CaracteristicaProduto> caracteristicas = new HashSet<>();
 
 	// @NotNull
 	// @Size(min = 1)
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
 	private Set<ImagemProduto> imagens = new HashSet<>();
+
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+	private Set<OpiniaoProduto> opinioes = new HashSet<>();
+
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+	private Set<PerguntaProduto> perguntas = new HashSet<>();
 
 	@Deprecated
 	public Produto() {
@@ -112,6 +118,18 @@ public class Produto {
 
 	public Usuario getDono() {
 		return dono;
+	}
+
+	public Set<ImagemProduto> getImagens() {
+		return imagens;
+	}
+
+	public Set<OpiniaoProduto> getOpinioes() {
+		return opinioes;
+	}
+
+	public Set<PerguntaProduto> getPerguntas() {
+		return perguntas;
 	}
 
 	public void associaImagens(Set<String> imgs) {
