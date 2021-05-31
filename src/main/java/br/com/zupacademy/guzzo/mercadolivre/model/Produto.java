@@ -153,4 +153,9 @@ public class Produto {
 
 	}
 
+	public void abateEstoque(Integer quantidadeAbater) {
+		this.quantidade -= quantidadeAbater;
+
+	}
+
 }
