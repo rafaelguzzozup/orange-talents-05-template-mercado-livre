@@ -21,4 +21,19 @@ public class Emails {
 		mailer.send("<html>...</html>", "Nova Venda...", compra.getComprador().getLogin(), "novapergunta@teste.com",
 				compra.getProduto().getDono().getLogin());
 	}
+
+	public void vendaComSucessoComprador(Compra compra) {
+		mailer.send("Ual!! vc comprou o super produto " + compra.getProduto().getNome() + " Parabens!!",
+				"Compra efetuada com sucesso", "meumercadolivre", "meumercadolivre@teste.com",
+				compra.getComprador().getLogin());
+	}
+
+	public void vendaSucessoComprador(Compra compra) {
+		mailer.send(
+				"Infelizmente ocorreu um problema com a sua compra acesse http://"
+						+ compra.getTipoPagamento().getRedirect(compra.getUuid()),
+				"Compra efetuada sem sucesso", "meumercadolivre", "meumercadolivre@teste.com",
+				compra.getComprador().getLogin());
+	}
+
 }

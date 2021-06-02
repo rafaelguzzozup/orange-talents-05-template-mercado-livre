@@ -34,7 +34,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/auth/**").permitAll()
-				.antMatchers(HttpMethod.POST, "//usuarios").permitAll()
+				.antMatchers(HttpMethod.POST, "/usuarios").permitAll()
+				.antMatchers(HttpMethod.POST, "/api/fake/**").permitAll()
 				.anyRequest().authenticated()
 			.and()
 				.cors()

@@ -17,7 +17,6 @@ public class UsersService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		System.out.println(username);
 		Usuario usuario = usuarioRepository.findByLogin(username)
 				.orElseThrow(() -> new UsernameNotFoundException("Dados inválidos!"));
 

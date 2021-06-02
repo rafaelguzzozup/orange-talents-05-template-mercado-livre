@@ -51,7 +51,7 @@ public class ProcessaCompraParte1Controller {
 		Compra compra = form.converterParaCompra(produto, usuarioLogado.getUsuario());
 		String urlRedirect = compra.getTipoPagamento().getRedirect(compra.getUuid());
 		emails.novaVenda(compra);
-		em.merge(produto);
+		//em.merge(produto);
 		em.persist(compra);
 		return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).body(urlRedirect);
 
